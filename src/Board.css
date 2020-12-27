@@ -1,0 +1,44 @@
+.word {
+    font-family: monospace;
+    font-size: 80px;
+    color: CadetBlue;
+    background: Beige;
+    border: 3px solid grey;
+    margin: auto;
+    line-height: 500px;
+    text-align: center;
+}
+
+.score {
+  text-align: center;
+  font-family: monospace;
+  font-size: 30px;
+}
+
+.one {
+  color: #e5db82;
+}
+
+.two {
+  color: #768766;
+}
+
+.three {
+  color: #bb9944;
+}
+
+.four {
+  color: #15252d;
+}
+
+.five {
+  color: #bb6622;
+}
+
+.eight {
+  color: #b1200f;
+}
+
+.ten {
+  color: #342e3a;
+}
