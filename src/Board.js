@@ -1,8 +1,6 @@
 import './Board.css';
 import { letterValues } from './Game.js'
 import React, { Component } from 'react';
-import Contacts from './components/contacts';
-
 
 export class HookieBoard extends Component {
     onSelect() {
@@ -10,15 +8,6 @@ export class HookieBoard extends Component {
         this.props.moves.findWord(word);
     }
 
-    // componentDidMount() {
-    //     const apiUrl = 
-    //     fetch('http://jsonplaceholder.typicode.com/users')
-    //     .then(res => res.json())
-    //     .then((data) => {
-    //       this.setState({ contacts: data })
-    //     })
-    //     .catch(console.log)
-    // }
     render () {
         return (
             <>
