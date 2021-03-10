@@ -21,12 +21,11 @@
     "standard": "^16.0.3"
   },
   "scripts": {
-    "start": "node -r esm server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "yreact-scripts test",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "node -r esm src/server.js",
-    "owl": "node -r esm src/owl.js"
+    "serve": "node -r esm src/server.js"
   },
   "eslintConfig": {
     "extends": [
