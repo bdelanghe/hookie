@@ -1,5 +1,4 @@
-import { INVALID_MOVE, PlayerView } from 'boardgame.io/core'
-// import { defineWord } from './owl.js'
+import { INVALID_MOVE } from 'boardgame.io/core'
 
 const wordList = require('./words.json')
 
@@ -100,13 +99,13 @@ export const Hookie = {
     }
   },
 
-  playerView: PlayerView.STRIP_SECRETS,
+//  playerView: PlayerView.STRIP_SECRETS,
 
-  endIf: (G, ctx) => {
-    if (G.score >= 100) {
-      return { winner: ctx.currentPlayer }
-    }
-  },
+//   endIf: (G, ctx) => {
+//    if (G.score >= 100) {
+//      return { winner: ctx.currentPlayer }
+//    }
+//   },
 
   onEnd: (G, ctx) => {
     newWord(G, ctx)
