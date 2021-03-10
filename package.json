@@ -21,7 +21,7 @@
     "standard": "^16.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node -r esm server.js",
     "build": "react-scripts build",
     "test": "yreact-scripts test",
     "eject": "react-scripts eject",
