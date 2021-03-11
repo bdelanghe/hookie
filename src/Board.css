@@ -1,12 +1,18 @@
+* {
+  cursor: pointer;
+}
+
 .word {
-    font-family: monospace;
-    font-size: 80px;
-    color: CadetBlue;
-    background: Beige;
-    border: 3px solid grey;
-    margin: auto;
-    line-height: 500px;
-    text-align: center;
+  font-family: monospace;
+  font-size: 80px;
+  color: CadetBlue;
+  text-align: center;
+}
+
+::selection {
+  color: none;
+  background: none;
+  text-shadow: 2px 4px 2px grey;
 }
 
 .score {

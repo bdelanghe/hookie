@@ -4,8 +4,10 @@ import React, { Component } from 'react';
 
 export class HookieBoard extends Component {
   onSelect () {
-    const word = window.getSelection().toString()
+    const sel = window.getSelection()
+    const word = sel.toString()
     this.props.moves.findWord(word)
+    sel.removeAllRanges()
   }
 
   render () {
