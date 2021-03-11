@@ -7,10 +7,6 @@ require('dotenv').config()
 const HookieClient = Client({
   game: Hookie,
   numPlayers: 1,
-//  multiplayer: Local({
-//    persist: true,
-//    storageKey: 'bgio'
-//  }),
   board: HookieBoard,
   debug: false
 })

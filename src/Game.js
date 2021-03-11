@@ -39,9 +39,9 @@ const isWord = (str) => wordList.includes(str)
 
 function subStrings (word) {
   const substrings = []
-  for (let wlen = 2; wlen < word.length; wlen++) {
-    for (let srt = 0; srt <= word.length - wlen; srt++) {
-      substrings.push(word.substring(srt, srt + wlen))
+  for (let len = 2; len < word.length; len++) {
+    for (let srt = 0; srt <= word.length - len; srt++) {
+      substrings.push(word.substring(srt, srt + len))
     }
   }
   return substrings
@@ -62,7 +62,7 @@ function findWord (G, ctx, word) {
 function newWord (G, ctx) {
   const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0
-  G.fullword = G.word = wordList[n - 1]
+  G.start = G.word = wordList[n - 1]
   G.subs = subStrings(G.word)
 }
 
@@ -76,7 +76,7 @@ export const Hookie = {
     score: 0,
     phaseScore: 0,
     lastAdded: 0,
-    fullword: 'hookie',
+    start: 'hookie',
     subs: subStrings('hookie')
   }),
 
@@ -93,7 +93,7 @@ export const Hookie = {
 
     next: {
       onBegin: (G, ctx) => newWord(G, ctx),
-      endIf: (G) => (G.fullword === G.word),
+      endIf: (G) => (G.start === G.word),
       next: 'search',
       client: false
     }

@@ -11,7 +11,7 @@ export class HookieBoard extends Component {
   render () {
     return (
       <>
-        <h1 className='word' onMouseUp={() => this.onSelect()}>
+        <h1 className='word' onMouseUp={() => this.onSelect()} onTouchEnd={() => this.onSelect()}>
           {splitWord(this.props.G.word)}
         </h1>
         <p className='score'>Score: {this.props.G.score}</p>
