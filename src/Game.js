@@ -28,7 +28,55 @@ export const letterValues = {
   w: 4,
   x: 8,
   y: 4,
-  z: 10
+  z: 10,
+  BLANK: 0
+}
+
+export const letterCount = {
+  a: 9,
+  b: 2,
+  c: 2,
+  d: 4,
+  e: 12,
+  f: 2,
+  g: 3,
+  h: 2,
+  i: 9,
+  j: 1,
+  k: 1,
+  l: 4,
+  m: 2,
+  n: 6,
+  o: 8,
+  p: 2,
+  q: 1,
+  r: 6,
+  s: 4,
+  t: 6,
+  u: 4,
+  v: 2,
+  w: 2,
+  x: 1,
+  y: 2,
+  z: 1,
+  BLANK: 2,
+}
+
+const numName = {
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  8: 'eight',
+  10: 'ten',
+  0: 'zero'
+}
+
+function splitWord (word) {
+  return word.split('').map((char, index) => {
+    return <span key={index} className={(index === 1 ? 'star ' : '') + numName[letterValues[char]]}>{char}</span>
+  })
 }
 
 function wordValue (word) {
@@ -77,7 +125,9 @@ export const Hookie = {
     phaseScore: 0,
     lastAdded: 0,
     start: 'hookie',
-    subs: subStrings('hookie')
+    subs: subStrings('hookie'),
+    bag: letterCount,
+    starPos: 0
   }),
 
   // validateSetupData: (setupData, numPlayers) =>

@@ -34,6 +34,6 @@ const numName = {
 
 function splitWord (word) {
   return word.split('').map((char, index) => {
-    return <span key={index} className={numName[letterValues[char]]}>{char}</span>
+    return <span key={index} className={(index === 1 ? 'star ' : '') + numName[letterValues[char]]}>{char}</span>
   })
 }

@@ -21,6 +21,12 @@
   font-size: 30px;
 }
 
+.star {
+  text-emphasis-style: "\2605";
+  text-emphasis-color: black;
+  text-emphasis-position: under left;
+}
+
 .one {
   color: #e5db82;
 }
