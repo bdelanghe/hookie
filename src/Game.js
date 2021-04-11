@@ -62,7 +62,7 @@ export const letterCount = {
   BLANK: 2,
 }
 
-const numName = {
+const valueName = {
   1: 'one',
   2: 'two',
   3: 'three',
@@ -71,12 +71,6 @@ const numName = {
   8: 'eight',
   10: 'ten',
   0: 'zero'
-}
-
-function splitWord (word) {
-  return word.split('').map((char, index) => {
-    return <span key={index} className={(index === 1 ? 'star ' : '') + numName[letterValues[char]]}>{char}</span>
-  })
 }
 
 function wordValue (word) {
@@ -96,8 +90,8 @@ function subStrings (word) {
 }
 
 function findWord (G, ctx, word) {
-  if (word.length >= 2 && word !== G.word && G.word.includes(word) && wordList.includes(word)) {
-    G.word = word
+  if (word.length >= 2 && word !== G.word.string && G.word.string.includes(word) && wordList.includes(word)) {
+    G.word = getWord(word)
     G.subs = subStrings(word)
     G.lastAdded = wordValue(word)
     G.phaseScore += G.lastAdded
@@ -110,8 +104,24 @@ function findWord (G, ctx, word) {
 function newWord (G, ctx) {
   const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0
-  G.start = G.word = wordList[n - 1]
-  G.subs = subStrings(G.word)
+  G.start = wordList[n - 1]
+  G.word = getWord(G.start)
+  G.subs = subStrings(G.start)
+}
+
+function getLetter(char) {
+  return {
+    value: letterValues[char],
+    valueName: valueName[letterValues[char]],
+    char: char
+  }
+}
+
+function getWord(word) {
+  return {
+    string: word,
+    letters: word.split('').map(getLetter),
+  }
 }
 
 export const Hookie = {
@@ -120,7 +130,7 @@ export const Hookie = {
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
-    word: 'hookie',
+    word: getWord('hookie'),
     score: 0,
     phaseScore: 0,
     lastAdded: 0,

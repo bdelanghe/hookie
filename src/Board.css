@@ -1,18 +1,11 @@
-* {
-  cursor: pointer;
-}
+
 
 .word {
   font-family: monospace;
   font-size: 80px;
   color: CadetBlue;
   text-align: center;
-}
-
-::selection {
-  color: none;
-  background: none;
-  text-shadow: 2px 4px 2px grey;
+  cursor: pointer;
 }
 
 .score {
@@ -27,30 +20,34 @@
   text-emphasis-position: under left;
 }
 
-.one {
+.letter::selection {
+  text-shadow: 2px 4px 2px grey;
+}
+
+.letter.one {
   color: #e5db82;
 }
 
-.two {
+.letter.two {
   color: #768766;
 }
 
-.three {
+.letter.three {
   color: #bb9944;
 }
 
-.four {
+.letter.four {
   color: #15252d;
 }
 
-.five {
+.letter.five {
   color: #bb6622;
 }
 
-.eight {
+.letter.eight {
   color: #b1200f;
 }
 
-.ten {
+.letter.ten {
   color: #342e3a;
 }
