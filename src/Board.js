@@ -5,8 +5,8 @@ import classNames from 'classnames';
 export class HookieBoard extends Component {
   onSelect () {
     const sel = window.getSelection()
-    const word = sel.toString()
-    this.props.moves.findWord(word)
+    const range = sel.getRangeAt(0)
+    this.props.moves.findWord(selectionIndex(range.startContainer), selectionIndex(range.endContainer))
     sel.removeAllRanges()
   }
 
@@ -26,6 +26,10 @@ export class HookieBoard extends Component {
 function formatWord (word) {
   return word.letters.map((letter, index) => {
     const clsn = classNames('letter', { star: letter.isStarred }, letter.numberName)
-    return <span key={index} className={clsn}>{letter.char}</span>
+    return <span key={index} data-idx={index} className={clsn}>{letter.char}</span>
   })
+}
+
+function selectionIndex(container) {
+  return parseInt(container.parentElement.dataset.idx, 10)
 }
