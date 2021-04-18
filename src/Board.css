@@ -19,7 +19,7 @@ body {
 .word {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-around;
+  justify-content: center;
   cursor: pointer;
 }
 
@@ -35,22 +35,46 @@ body {
 } */
 
 .tile {
+  display: flex;
+  flex-flow: column wrap;
   width: 6vw;
   height: 6vw;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
   border: .1vw solid #000;
   border-radius: .5vw;
+}
+
+.tile.empty.tws {
+  background-color: lightpink !important;
+}
+
+.tile.empty.dls {
+  background-color: lightskyblue !important;
+}
+
+.tile.star {
+  border: .3vw outset black !important;
+  background-color: rgb(194, 194, 182) !important; 
 }
 
 .tile.filled {
   background-color: beige;
   text-align: center;
   vertical-align: middle;
-  box-shadow: .3vw .3vw grey;
+  border: outset !important;
+  box-shadow: .2vw .2vw grey;
 }
 
 .tile.empty {
   background-color: slategray;
+}
+
+.multiplier {
+  font-size: 1vw;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .sub {

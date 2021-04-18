@@ -25,18 +25,14 @@ export class HookieBoard extends Component {
 function formatSpaces(spaces) {
   return spaces.map((space, index) => {
     if (space.letter){
-      const clsn = classNames('letter', space.letter.valueName)
-      return <div className='tile filled' key={index} data-idx={index}><span  data-value={space.letter.value} className={clsn}>{space.letter.char}</span><span className='sub'>{space.letter.value}</span></div>
+      const clsnl = classNames('letter', space.letter.valueName)
+      const clsns = classNames('tile', space.multiplier, 'filled',)
+      return <div className={clsns} key={index} data-idx={index}><div><span data-value={space.letter.value} className={clsnl}>{space.letter.char}</span><span className='sub'>{space.letter.value}</span></div></div>
     } else {
-      return <div className='tile empty' key={index} data-idx={index}></div>
+      const long_name = {tws: 'triple word score', dls: 'double letter score'}
+      const clsns = classNames('tile', space.multiplier, 'empty',)
+      return <div className={clsns} key={index} data-idx={index}><span className='multiplier'>{long_name[space.multiplier]}</span></div>
     }
-  })
-}
-
-function formatWord(word) {
-  return word.letters.map((letter, index) => {
-    const clsn = classNames('letter', { star: letter.isStarred }, letter.valueName )
-    return <div className='tile'><span key={index} data-idx={index} data-value={letter.value} className={clsn}>{letter.char}</span><span className='sub'>{letter.value}</span></div>
   })
 }
 

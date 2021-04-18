@@ -126,13 +126,9 @@ function getWord(word) {
   }
 }
 
-const TWS = 'tws'
-const DWS = 'dws'
-const STAR = 'star'
-
 
 function getSpaces(word, starredPos) {
-  const line = [TWS, null, null, DWS, null, null, null, STAR, null, null, null, DWS, null, null, TWS]
+  const line = ['tws', null, null, 'dls', null, null, null, 'star', null, null, null, 'dls', null, null, 'tws']
   const letters = word.split('')
   const spaces = []
   line.forEach((multiplier, index) => {
