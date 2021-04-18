@@ -26,7 +26,7 @@ export class HookieBoard extends Component {
 function formatWord (word) {
   return word.letters.map((letter, index) => {
     const clsn = classNames('letter', { star: letter.isStarred }, letter.valueName )
-    return <span key={index} data-idx={index} className={clsn}>{letter.char}</span>
+    return <div className='tile'><span key={index} data-idx={index} data-value={letter.value} className={clsn}>{letter.char}</span><span className='sub'>{letter.value}</span></div>
   })
 }
 
