@@ -89,9 +89,10 @@ function subStrings (word) {
   return substrings
 }
 
-function findWord (G, ctx, word) {
+function findWord (G, ctx, start, end) {
+  const word = G.word.string.substring(start, end + 1)
   if (word.length >= 2 && word !== G.word.string && G.word.string.includes(word) && wordList.includes(word)) {
-    G.word = getWord(word)
+    G.word = getWord(word, G.word.starredPos)
     G.subs = subStrings(word)
     G.lastAdded = wordValue(word)
     G.phaseScore += G.lastAdded
@@ -105,22 +106,25 @@ function newWord (G, ctx) {
   const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0
   G.start = wordList[n - 1]
-  G.word = getWord(G.start)
+  const starredPos = ctx.random.Die(G.start.length) - 1
+  G.word = getWord(G.start, starredPos)
   G.subs = subStrings(G.start)
 }
 
-function getLetter(char) {
+function getLetter(char, isStarred) {
   return {
     value: letterValues[char],
     valueName: valueName[letterValues[char]],
-    char: char
+    char,
+    isStarred,
   }
 }
 
-function getWord(word) {
+function getWord(word, starredPos) {
   return {
     string: word,
-    letters: word.split('').map(getLetter),
+    starredPos,
+    letters: word.split('').map((char, index) => getLetter(char, index === starredPos)),
   }
 }
 
@@ -130,7 +134,7 @@ export const Hookie = {
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
-    word: getWord('hookie'),
+    word: getWord('hookie', 1),
     score: 0,
     phaseScore: 0,
     lastAdded: 0,
