@@ -35,17 +35,22 @@ body {
 } */
 
 .tile {
-  background-color: beige;
   width: 6vw;
   height: 6vw;
-
-  text-align: center;
-  vertical-align: middle;
-
   box-sizing: border-box;
-  box-shadow: .3vw .3vw grey;
   border: .1vw solid #000;
   border-radius: .5vw;
+}
+
+.tile.filled {
+  background-color: beige;
+  text-align: center;
+  vertical-align: middle;
+  box-shadow: .3vw .3vw grey;
+}
+
+.tile.empty {
+  background-color: slategray;
 }
 
 .sub {

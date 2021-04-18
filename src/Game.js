@@ -111,21 +111,39 @@ function newWord (G, ctx) {
   G.subs = subStrings(G.start)
 }
 
-function getLetter(char, isStarred) {
+function getLetter(char) {
   return {
     value: letterValues[char],
     valueName: valueName[letterValues[char]],
     char,
-    isStarred,
   }
 }
 
-function getWord(word, starredPos) {
+function getWord(word) {
   return {
     string: word,
-    starredPos,
-    letters: word.split('').map((char, index) => getLetter(char, index === starredPos)),
+    // letters: word.split('').map(char => getLetter(char)),
   }
+}
+
+const TWS = 'tws'
+const DWS = 'dws'
+const STAR = 'star'
+
+
+function getSpaces(word, starredPos) {
+  const line = [TWS, null, null, DWS, null, null, null, STAR, null, null, null, DWS, null, null, TWS]
+  const letters = word.split('')
+  const spaces = []
+  line.forEach((multiplier, index) => {
+    const letter_i = index - (7 - starredPos) // 7 is the index for the star
+    if (letter_i >= 0 && letter_i < letters.length) {
+      spaces.push({multiplier: multiplier, letter: getLetter(letters[letter_i])});
+    } else {
+      spaces.push({multiplier: multiplier, letter: null});
+    }
+  })
+  return spaces
 }
 
 export const Hookie = {
@@ -134,14 +152,14 @@ export const Hookie = {
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
-    word: getWord('hookie', 1),
+    word: getWord('hookie'),
+    spaces: getSpaces('hookie', 1),
     score: 0,
     phaseScore: 0,
     lastAdded: 0,
     start: 'hookie',
     subs: subStrings('hookie'),
-    bag: letterCount,
-    starPos: 0
+    bag: letterCount
   }),
 
   // validateSetupData: (setupData, numPlayers) =>
