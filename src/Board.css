@@ -1,7 +1,9 @@
-
+body {
+  background-color: lightgrey;
+}
 
 .word {
-  font-family: monospace;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 80px;
   color: CadetBlue;
   text-align: center;
@@ -18,6 +20,16 @@
   text-emphasis-style: "\2605";
   text-emphasis-color: black;
   text-emphasis-position: under left;
+}
+
+.letter {
+  display: inline-block;
+  background-color: beige;
+  width: 100px;
+  height: 100px;
+  border: 3px solid #000;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .letter::selection {
