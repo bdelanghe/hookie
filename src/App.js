@@ -6,7 +6,7 @@ const HookieClient = Client({
   game: Hookie,
   numPlayers: 1,
   board: HookieBoard,
-  debug: false
+  // debug: false
 })
 
 console.log(__filename)

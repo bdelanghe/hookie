@@ -6,7 +6,11 @@ export class HookieBoard extends Component {
   onSelect () {
     const sel = window.getSelection()
     const range = sel.getRangeAt(0)
-    this.props.moves.findWord(selectionIndex(range.startContainer), selectionIndex(range.endContainer))
+    const start = selectionIndex(range.startContainer)
+    const end = selectionIndex(range.endContainer)
+    if(typeof start === "number" && typeof end === "number" ) {
+      this.props.moves.findWord(selectionIndex(range.startContainer), selectionIndex(range.endContainer))
+    }
     sel.removeAllRanges()
   }
 

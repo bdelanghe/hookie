@@ -117,6 +117,9 @@ function joinTiles(spaces, start, end) {
 }
 
 function findWord(G, ctx, start, end) {
+  if(typeof G.spaces[start] === "undefined" || typeof G.spaces[start].letter === "undefined" || typeof G.spaces[end] ===  "undefined" || typeof G.spaces[end].letter ===  "undefined" ) {
+    return INVALID_MOVE
+  }
   const { word, includesStar, score } = joinTiles(G.spaces, start, end)
   if (word.length >= 2 && word !== G.word && G.word.includes(word) && wordList.includes(word) && includesStar) {
     const newStarredPos = 7 - start
