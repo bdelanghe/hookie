@@ -73,28 +73,57 @@ const valueName = {
   0: 'zero'
 }
 
-function wordValue (word) {
-  return word.split('').map(c => letterValues[c]).reduce((a, b) => a + b, 0)
-}
-
 const isWord = (str) => wordList.includes(str)
 
-function subStrings (word) {
+function subStrings(word, starredPos) {
   const substrings = []
   for (let len = 2; len < word.length; len++) {
-    for (let srt = 0; srt <= word.length - len; srt++) {
-      substrings.push(word.substring(srt, srt + len))
+    for (let start = 0; start <= word.length - len; start++) {
+      if (start <= starredPos + 1 && start + len >= starredPos + 1) {
+        substrings.push(word.substring(start, start + len))
+      }
     }
   }
   return substrings
 }
+function joinTiles(spaces, start, end) {
+  const selected = spaces.slice(start, end + 1)
+  let word = ''
+  let includesStar = false
+  let score = 0
+  let incluesTWS = false
+  // let doubleLetterBonus = 0
+  selected.forEach((space) => {
+    word += space.letter.char
+    score += space.letter.value
+    switch (space.multiplier) {
+      case 'star':
+        includesStar = true
+        break;
+      case 'tws':
+        incluesTWS = true
+        break;
+      case 'dls':
+        // doubleLetterBonus += space.letter.value
+        score += space.letter.value
+        break;
+      default:
+    }
+  })
+  if (incluesTWS) {
+    score *= 3
+  }
+  return { word, includesStar, score }
+}
 
-function findWord (G, ctx, start, end) {
-  const word = G.word.string.substring(start, end + 1)
-  if (word.length >= 2 && word !== G.word.string && G.word.string.includes(word) && wordList.includes(word)) {
-    G.word = getWord(word, G.word.starredPos)
-    G.subs = subStrings(word)
-    G.lastAdded = wordValue(word)
+function findWord(G, ctx, start, end) {
+  const { word, includesStar, score } = joinTiles(G.spaces, start, end)
+  if (word.length >= 2 && word !== G.word && G.word.includes(word) && wordList.includes(word) && includesStar) {
+    const newStarredPos = 7 - start
+    G.word = word
+    G.subs = subStrings(word, newStarredPos)
+    G.lastAdded = score
+    G.spaces = getSpaces(word, newStarredPos)
     G.phaseScore += G.lastAdded
     G.score += G.lastAdded
   } else {
@@ -104,28 +133,38 @@ function findWord (G, ctx, start, end) {
 
 function newWord (G, ctx) {
   const n = ctx.random.Die(wordList.length)
-  G.phaseScore = 0
+  G.phaseScore = 0;
   G.start = wordList[n - 1]
-  const starredPos = ctx.random.Die(G.start.length) - 1
-  G.word = getWord(G.start, starredPos)
-  G.subs = subStrings(G.start)
+  const rand = ctx.random.Die(G.start.length)
+  const righ_shift = (G.start.length - (rand % 9) > 8) ? (G.start.length - (rand % 9)) - 7 : 0;
+  G.rand = rand
+  G.starredPos = ((rand % 9) + righ_shift) - 1
+  G.word = G.start
+  G.spaces = getSpaces(G.start, G.starredPos)
+  G.subs = subStrings(G.start, G.starredPos)
 }
 
-function getLetter(char, isStarred) {
+function getLetter(char) {
   return {
     value: letterValues[char],
     valueName: valueName[letterValues[char]],
     char,
-    isStarred,
   }
 }
 
-function getWord(word, starredPos) {
-  return {
-    string: word,
-    starredPos,
-    letters: word.split('').map((char, index) => getLetter(char, index === starredPos)),
-  }
+function getSpaces(word, starredPos) {
+  const line = ['tws', null, null, 'dls', null, null, null, 'star', null, null, null, 'dls', null, null, 'tws']
+  const letters = word.split('')
+  const spaces = []
+  line.forEach((multiplier, index) => {
+    const letter_i = index - (7 - starredPos) // 7 is the index for the star
+    if (letter_i >= 0 && letter_i < letters.length) {
+      spaces.push({multiplier: multiplier, letter: getLetter(letters[letter_i])});
+    } else {
+      spaces.push({multiplier: multiplier, letter: null});
+    }
+  })
+  return spaces
 }
 
 export const Hookie = {
@@ -134,14 +173,15 @@ export const Hookie = {
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
-    word: getWord('hookie', 1),
+    word: 'hookie',
+    spaces: getSpaces('hookie', 1),
     score: 0,
     phaseScore: 0,
     lastAdded: 0,
     start: 'hookie',
-    subs: subStrings('hookie'),
+    subs: subStrings('hookie', 1),
     bag: letterCount,
-    starPos: 0
+    starredPos: 1,
   }),
 
   // validateSetupData: (setupData, numPlayers) =>

@@ -14,7 +14,7 @@ export class HookieBoard extends Component {
     return (
       <>
         <h1 className='word' onPointerUp={() => this.onSelect()}>
-          {formatWord(this.props.G.word)}
+          {formatSpaces(this.props.G.spaces)}
         </h1>
         <p className='score'>Score: {this.props.G.score}</p>
       </>
@@ -22,11 +22,17 @@ export class HookieBoard extends Component {
   }
 };
 
-
-function formatWord (word) {
-  return word.letters.map((letter, index) => {
-    const clsn = classNames('letter', { star: letter.isStarred }, letter.valueName )
-    return <div className='tile'><span key={index} data-idx={index} data-value={letter.value} className={clsn}>{letter.char}</span><span className='sub'>{letter.value}</span></div>
+function formatSpaces(spaces) {
+  return spaces.map((space, index) => {
+    if (space.letter){
+      const clsnl = classNames('letter', space.letter.valueName)
+      const clsns = classNames('tile', space.multiplier, 'filled',)
+      return <div className={clsns} key={index}><div><span data-idx={index} className={clsnl}>{space.letter.char}</span><span className='sub' data-idx={index}>{space.letter.value}</span></div></div>
+    } else {
+      const long_name = {tws: 'triple word score', dls: 'double letter score'}
+      const clsns = classNames('tile', space.multiplier, 'empty',)
+      return <div className={clsns} key={index}><span className='multiplier'>{long_name[space.multiplier]}</span></div>
+    }
   })
 }
 
