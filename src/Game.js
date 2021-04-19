@@ -77,15 +77,13 @@ const isWord = (str) => wordList.includes(str)
 
 function subStrings(word, starredPos) {
   const substrings = []
-  for (let len = 2; len < word.length; len++) {
-    for (let start = 0; start <= word.length - len; start++) {
-      if (start <= starredPos + 1 && start + len >= starredPos + 1) {
+    for (let start = 0; start <= starredPos; start++) {
+        for (let len = Math.max(starredPos - start + 1, 2); len < word.length - start; len++)
         substrings.push(word.substring(start, start + len))
-      }
     }
-  }
   return substrings
 }
+
 function joinTiles(spaces, start, end) {
   const selected = spaces.slice(start, end + 1)
   let word = ''
