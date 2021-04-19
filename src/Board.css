@@ -84,6 +84,7 @@ body {
 
 .letter {
   font-size: 4vw;
+  color: black;
   text-transform: uppercase;
 }
 
@@ -96,7 +97,7 @@ body {
   background: none;
 }
 
-.letter.one {
+/* .letter.one {
   color: #e5db82;
 }
 
@@ -122,4 +123,4 @@ body {
 
 .letter.ten {
   color: #342e3a;
-}
+} */

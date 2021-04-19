@@ -27,11 +27,11 @@ function formatSpaces(spaces) {
     if (space.letter){
       const clsnl = classNames('letter', space.letter.valueName)
       const clsns = classNames('tile', space.multiplier, 'filled',)
-      return <div className={clsns} key={index} data-idx={index}><div><span data-value={space.letter.value} className={clsnl}>{space.letter.char}</span><span className='sub'>{space.letter.value}</span></div></div>
+      return <div className={clsns} key={index}><div><span data-idx={index} className={clsnl}>{space.letter.char}</span><span className='sub' data-idx={index}>{space.letter.value}</span></div></div>
     } else {
       const long_name = {tws: 'triple word score', dls: 'double letter score'}
       const clsns = classNames('tile', space.multiplier, 'empty',)
-      return <div className={clsns} key={index} data-idx={index}><span className='multiplier'>{long_name[space.multiplier]}</span></div>
+      return <div className={clsns} key={index}><span className='multiplier'>{long_name[space.multiplier]}</span></div>
     }
   })
 }
