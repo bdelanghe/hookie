@@ -9,9 +9,6 @@ const HookieClient = Client({
   debug: false
 })
 
-console.log(__filename)
-
-
 const App = () => (
   <div>
     <HookieClient playerID='0' />
