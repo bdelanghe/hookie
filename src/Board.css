@@ -26,6 +26,7 @@ body {
 .score {
   font-family: monospace;
   font-size: 3vw;
+  user-select: none;
 }
 
 /* .star {
@@ -69,6 +70,7 @@ body {
 
 .tile.empty {
   background-color: slategray;
+  user-select: none;
 }
 
 .multiplier {
@@ -80,6 +82,7 @@ body {
 .sub {
   font-size: 1.5vw;
   vertical-align: sub;
+  user-select: none;
 }
 
 .letter {
