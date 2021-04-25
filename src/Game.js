@@ -1,4 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
+import wordsList from './words'
 
 const dictionary = require('./words.json')
 
@@ -119,7 +120,7 @@ function findWord(G, ctx, start, end) {
     return INVALID_MOVE
   }
   const { word, includesStar, score } = joinTiles(G.spaces, start, end)
-  if (word.length >= 2 && word !== G.word && G.word.includes(word) && dictionary.includes(word) && includesStar) {
+  if (word.length >= 2 && word !== G.word && G.word.includes(word) && includesStar && dictionary.includes(word) ) {
     const newStarredPos = 7 - start
     G.word = word
     G.subs = subStrings(word, newStarredPos)
@@ -131,16 +132,40 @@ function findWord(G, ctx, start, end) {
     return INVALID_MOVE
   }
 }
+function removeLetters(bag, word) {
+  word.split('').forEach(letter => {
+    if (letter in bag) {
+      bag[letter] =  bag[letter] - 1
+      if (bag[letter] == 0) {
+        delete(bag[letter])
+      }
+  }
+  })
+  return bag
+}
+
+// function makeWordlist(bag) {
+  
+// }
 
 function newWord (G, ctx) {
-  const n = ctx.random.Die(G.wordList.length)
+  
+  // remove the last word from the bag
+  G.bag = removeLetters(G.bag, G.start)
+  console.time('wordList')
+  const wordList = wordsList(G.bag)
+  console.timeEnd('wordList')
+  console.log("this many words available", wordList.length)
+
+  const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0;
-  G.start = G.wordList[n - 1]
+  G.start = wordList[n - 1]
   const rand = ctx.random.Die(G.start.length)
   const righ_shift = (G.start.length - (rand % 9) > 8) ? (G.start.length - (rand % 9)) - 7 : 0;
   G.rand = rand
   G.starredPos = ((rand % 9) + righ_shift) - 1
   G.word = G.start
+  
   G.spaces = getSpaces(G.start, G.starredPos)
   G.subs = subStrings(G.start, G.starredPos)
 }
@@ -182,7 +207,6 @@ export const Hookie = {
     start: 'hookie',
     subs: subStrings('hookie', 1),
     bag: Object.assign({}, letterCount),
-    wordList: dictionary.slice(),
     starredPos: 1,
   }),
 
