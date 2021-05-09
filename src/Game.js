@@ -136,7 +136,7 @@ function removeLetters(bag, word) {
   word.split('').forEach(letter => {
     if (letter in bag) {
       bag[letter] =  bag[letter] - 1
-      if (bag[letter] == 0) {
+      if (bag[letter] === 0) {
         delete(bag[letter])
       }
   }
