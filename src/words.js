@@ -9,7 +9,7 @@ const counter = (bag) => {
     return counts;
 }
 
-export const words = (bag) => {
+export const wordsList = (bag) => {
     let words = [];
     const counts = counter(bag);
     let to_check = [{"node": root, "countsIndex": 0}];
@@ -19,7 +19,7 @@ export const words = (bag) => {
             words.push(...node['words'])
         } else {
             const count = counts[countsIndex];
-            for (n = 0; n <= count; n++) {
+            for (let n = 0; n <= count; n++) {
                 if (n in node) {
                     to_check.push({"node": node[n], "countsIndex": countsIndex + 1})
                 }

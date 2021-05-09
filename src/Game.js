@@ -1,5 +1,5 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
-import wordsList from './words'
+import { wordsList } from './words'
 
 const dictionary = require('./words.json')
 
@@ -79,8 +79,11 @@ const isWord = (str) => dictionary.includes(str)
 function subStrings(word, starredPos) {
   const substrings = []
     for (let start = 0; start <= starredPos; start++) {
-        for (let len = Math.max(starredPos - start + 1, 2); len < word.length - start; len++)
-        substrings.push(word.substring(start, start + len))
+        for (let len = Math.max(starredPos - start + 1, 2); len <= word.length - start; len++) {
+          if (len - start !== word.length) {
+            substrings.push(word.substring(start, start + len))
+          }
+        }
     }
   return substrings
 }
@@ -144,18 +147,11 @@ function removeLetters(bag, word) {
   return bag
 }
 
-// function makeWordlist(bag) {
-  
-// }
-
 function newWord (G, ctx) {
   
   // remove the last word from the bag
-  G.bag = removeLetters(G.bag, G.start)
   console.time('wordList')
   const wordList = wordsList(G.bag)
-  console.timeEnd('wordList')
-  console.log("this many words available", wordList.length)
 
   const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0;
@@ -168,6 +164,9 @@ function newWord (G, ctx) {
   
   G.spaces = getSpaces(G.start, G.starredPos)
   G.subs = subStrings(G.start, G.starredPos)
+  G.bag = removeLetters(G.bag, G.start)
+  const nextList = wordsList(G.bag)
+  G.wordsLeft = nextList.length
 }
 
 function getLetter(char) {
@@ -194,14 +193,16 @@ function getSpaces(word, starredPos) {
 }
 
 export const Hookie = {
-  seed: 2,
+  seed: 1,
   minPlayers: 1,
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
     word: 'hookie',
     spaces: getSpaces('hookie', 1),
+    endT: false,
     score: 0,
+    wordsLeft: dictionary.length,
     phaseScore: 0,
     lastAdded: 0,
     start: 'hookie',
@@ -215,30 +216,23 @@ export const Hookie = {
 
   phases: {
     search: {
-      moves: { findWord },
-      endIf: (G) => (!G.subs.some(isWord)),
-      next: 'next',
+      moves: { findWord, newWord },
+      endIf: (G) => (!G.subs.some(isWord) && G.start.length !== 2),
+      next: 'new',
       start: true
     },
 
-    next: {
+    new: {
       onBegin: (G, ctx) => newWord(G, ctx),
       endIf: (G) => (G.start === G.word),
-      next: 'search',
-      client: false
+      next: 'search'
     }
   },
 
-//  playerView: PlayerView.STRIP_SECRETS,
-
-//   endIf: (G, ctx) => {
-//    if (G.score >= 100) {
-//      return { winner: ctx.currentPlayer }
-//    }
-//   },
-
-  onEnd: (G, ctx) => {
-    newWord(G, ctx)
+  endIf: (G, ctx) => {
+    if (G.wordsLeft === 0) {
+      return { winner: ctx.currentPlayer };
+    }
   },
 
   ai: {
@@ -253,8 +247,8 @@ export const Hookie = {
   },
 
   events: {
-    endGame: false,
-    endPhase: false,
+    endGame: true,
+    endPhase: true,
     endTurn: false
   }
 
