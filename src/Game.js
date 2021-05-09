@@ -1,6 +1,7 @@
 import { INVALID_MOVE } from 'boardgame.io/core'
+import { wordsList } from './words'
 
-const wordList = require('./words.json')
+const dictionary = require('./words.json')
 
 export const letterValues = {
   a: 1,
@@ -29,10 +30,10 @@ export const letterValues = {
   x: 8,
   y: 4,
   z: 10,
-  BLANK: 0
+ // BLANK: 0
 }
 
-export const letterCount = {
+const letterCount = {
   a: 9,
   b: 2,
   c: 2,
@@ -59,7 +60,7 @@ export const letterCount = {
   x: 1,
   y: 2,
   z: 1,
-  BLANK: 2,
+ // BLANK: 2,
 }
 
 const valueName = {
@@ -73,13 +74,16 @@ const valueName = {
   0: 'zero'
 }
 
-const isWord = (str) => wordList.includes(str)
+const isWord = (str) => dictionary.includes(str)
 
 function subStrings(word, starredPos) {
   const substrings = []
     for (let start = 0; start <= starredPos; start++) {
-        for (let len = Math.max(starredPos - start + 1, 2); len < word.length - start; len++)
-        substrings.push(word.substring(start, start + len))
+        for (let len = Math.max(starredPos - start + 1, 2); len <= word.length - start; len++) {
+          if (len - start !== word.length) {
+            substrings.push(word.substring(start, start + len))
+          }
+        }
     }
   return substrings
 }
@@ -119,7 +123,7 @@ function findWord(G, ctx, start, end) {
     return INVALID_MOVE
   }
   const { word, includesStar, score } = joinTiles(G.spaces, start, end)
-  if (word.length >= 2 && word !== G.word && G.word.includes(word) && wordList.includes(word) && includesStar) {
+  if (word.length >= 2 && word !== G.word && G.word.includes(word) && includesStar && dictionary.includes(word) ) {
     const newStarredPos = 7 - start
     G.word = word
     G.subs = subStrings(word, newStarredPos)
@@ -131,8 +135,24 @@ function findWord(G, ctx, start, end) {
     return INVALID_MOVE
   }
 }
+function removeLetters(bag, word) {
+  word.split('').forEach(letter => {
+    if (letter in bag) {
+      bag[letter] =  bag[letter] - 1
+      if (bag[letter] === 0) {
+        delete(bag[letter])
+      }
+  }
+  })
+  return bag
+}
 
 function newWord (G, ctx) {
+  
+  // remove the last word from the bag
+  console.time('wordList')
+  const wordList = wordsList(G.bag)
+
   const n = ctx.random.Die(wordList.length)
   G.phaseScore = 0;
   G.start = wordList[n - 1]
@@ -141,8 +161,12 @@ function newWord (G, ctx) {
   G.rand = rand
   G.starredPos = ((rand % 9) + righ_shift) - 1
   G.word = G.start
+  
   G.spaces = getSpaces(G.start, G.starredPos)
   G.subs = subStrings(G.start, G.starredPos)
+  G.bag = removeLetters(G.bag, G.start)
+  const nextList = wordsList(G.bag)
+  G.wordsLeft = nextList.length
 }
 
 function getLetter(char) {
@@ -169,19 +193,21 @@ function getSpaces(word, starredPos) {
 }
 
 export const Hookie = {
-  seed: 2,
+  seed: 1,
   minPlayers: 1,
   maxPlayers: 1,
 
   setup: (ctx, setupData) => ({
     word: 'hookie',
     spaces: getSpaces('hookie', 1),
+    endT: false,
     score: 0,
+    wordsLeft: dictionary.length,
     phaseScore: 0,
     lastAdded: 0,
     start: 'hookie',
     subs: subStrings('hookie', 1),
-    bag: letterCount,
+    bag: Object.assign({}, letterCount),
     starredPos: 1,
   }),
 
@@ -190,30 +216,23 @@ export const Hookie = {
 
   phases: {
     search: {
-      moves: { findWord },
-      endIf: (G) => (!G.subs.some(isWord)),
-      next: 'next',
+      moves: { findWord, newWord },
+      endIf: (G) => (!G.subs.some(isWord) && G.start.length !== 2),
+      next: 'new',
       start: true
     },
 
-    next: {
+    new: {
       onBegin: (G, ctx) => newWord(G, ctx),
       endIf: (G) => (G.start === G.word),
-      next: 'search',
-      client: false
+      next: 'search'
     }
   },
 
-//  playerView: PlayerView.STRIP_SECRETS,
-
-//   endIf: (G, ctx) => {
-//    if (G.score >= 100) {
-//      return { winner: ctx.currentPlayer }
-//    }
-//   },
-
-  onEnd: (G, ctx) => {
-    newWord(G, ctx)
+  endIf: (G, ctx) => {
+    if (G.wordsLeft === 0) {
+      return { winner: ctx.currentPlayer };
+    }
   },
 
   ai: {
@@ -228,8 +247,8 @@ export const Hookie = {
   },
 
   events: {
-    endGame: false,
-    endPhase: false,
+    endGame: true,
+    endPhase: true,
     endTurn: false
   }
 

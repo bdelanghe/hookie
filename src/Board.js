@@ -19,6 +19,7 @@ export class HookieBoard extends Component {
   render () {
     return (
       <>
+        <span classNames='wordsLeft'><b>{this.props.G.wordsLeft}</b> words pausible in bag</span>
         <h1 className='word' onPointerUp={() => this.onSelect()}>
           {formatSpaces(this.props.G.spaces)}
         </h1>
