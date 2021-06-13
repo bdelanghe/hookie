@@ -16,6 +16,10 @@ export class HookieBoard extends Component {
     sel.removeAllRanges()
   }
 
+  onNewWord () {
+    this.props.moves.newWord();
+  }
+
   render () {
     return (
       <>
@@ -24,6 +28,7 @@ export class HookieBoard extends Component {
           {formatSpaces(this.props.G.spaces)}
         </h1>
         <p className='score'>Score: {this.props.G.score}</p>
+        <button id='newWord' onClick={() => this.onNewWord()}>New Word</button>
       </>
     )
   }
