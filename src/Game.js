@@ -209,6 +209,7 @@ export const Hookie = {
     subs: subStrings('hookie', 1),
     bag: Object.assign({}, letterCount),
     starredPos: 1,
+    over: false,
   }),
 
   // validateSetupData: (setupData, numPlayers) =>
@@ -250,6 +251,11 @@ export const Hookie = {
     endGame: true,
     endPhase: true,
     endTurn: false
-  }
+  },
+
+  onEnd: (G, ctx) => {
+    G.over = true
+    return G
+  },
 
 }

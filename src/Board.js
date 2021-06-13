@@ -3,6 +3,16 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 export class HookieBoard extends Component {
+  render () {
+    if (this.props.G.over) {
+      return <GameOverState />
+    }
+
+    return <PlayingState {...this.props} />
+  }
+}
+
+export class PlayingState extends Component {
   onSelect () {
     const sel = window.getSelection()
     if (sel.rangeCount) {
@@ -33,6 +43,12 @@ export class HookieBoard extends Component {
     )
   }
 };
+
+export class GameOverState extends Component {
+  render () {
+    return <h1>GAME OVER!!!</h1>
+  }
+}
 
 function formatSpaces(spaces) {
   return spaces.map((space, index) => {
