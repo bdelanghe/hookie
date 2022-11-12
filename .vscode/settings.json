@@ -3,6 +3,7 @@
         "boardgame",
         "get",
         "hookie",
-        "ttfb"
+        "ttfb",
+        "owlbot"
     ]
 }
